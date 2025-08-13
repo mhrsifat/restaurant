@@ -33,3 +33,32 @@ export const reservationByUser = (user_id) => {
 export const orderByReservation = (reservationId) => {
   return axios.post(`${ORDER_API_URL}/readOrder.php?id=${reservationId}`);
 };
+
+
+
+
+
+// src/actions/adminActions.js
+import axios from "axios";
+
+const ADMIN_MENU_API_URL = "http://localhost/restaurant_server/admin/menu";
+
+// Get all menu items
+export const getAdminMenu = () => {
+  return axios.get(`${ADMIN_MENU_API_URL}/readMenu.php`);
+};
+
+// Delete menu item
+export const deleteAdminMenuItem = (id) => {
+  return axios.post(`${ADMIN_MENU_API_URL}/deleteMenu.php`, { id });
+};
+
+// Add menu item
+export const addAdminMenuItem = (menuData) => {
+  return axios.post(`${ADMIN_MENU_API_URL}/addMenu.php`, menuData);
+};
+
+// Update menu item
+export const updateAdminMenuItem = (menuData) => {
+  return axios.post(`${ADMIN_MENU_API_URL}/updateMenu.php`, menuData);
+};
