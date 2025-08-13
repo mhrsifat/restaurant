@@ -62,3 +62,15 @@ export const addAdminMenuItem = (menuData) => {
 export const updateAdminMenuItem = (menuData) => {
   return axios.post(`${ADMIN_MENU_API_URL}/updateMenu.php`, menuData);
 };
+
+const ADMIN_RESERVATION_API_URL = "http://localhost/restaurant_server/admin/reservation";
+
+// Get all reservations
+export const getAdminReservations = () => {
+  return axios.get(`${ADMIN_RESERVATION_API_URL}/readReservations.php`);
+};
+
+// Get reservation by id (for view)
+export const getAdminReservationById = (id) => {
+  return axios.get(`${ADMIN_RESERVATION_API_URL}/readReservation.php?id=${id}`);
+};
