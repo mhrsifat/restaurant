@@ -4,6 +4,14 @@ import axios from "axios";
 const ADMIN_MENU_API_URL = "http://localhost/restaurant_server/admin/menu";
 const ADMIN_RESERVATION_API_URL = "http://localhost/restaurant_server/admin/reservation";
 const ADMIN_USER_API_URL = "http://localhost/restaurant_server/admin/user"; // optional if you create user endpoints
+const ADMIN_AUTH_API_URL = "http://localhost/restaurant_server/admin/auth"; // optional if you create user endpoints
+const ADMIN_INFO_API_URL = "http://localhost/restaurant_server/admin/info"; // optional if you create user endpoints
+
+export const adminLogin = (data) => axios.post(`${ADMIN_AUTH_API_URL}/login.php`, data);
+
+// info 
+export const getTotalUsers = () => axios.get(`${ADMIN_INFO_API_URL}/totaluser.php`);
+
 
 /* ---------- Menu (Admin) ---------- */
 export const getAdminMenu = () => axios.get(`${ADMIN_MENU_API_URL}/readMenu.php`);

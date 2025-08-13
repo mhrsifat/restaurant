@@ -21,6 +21,8 @@ import AdminMenuForm from "./admin/AdminMenuForm";
 import MenuDetails from "./admin/MenuDetails";
 import AdminReservations from "./admin/AdminReservations";
 import ReservationDetails from "./admin/ReservationDetails";
+import AdminLogin from "./admin/AdminLogin";
+import Invoice from "./admin/Invoice";
 
 const PublicLayout = () => (
   <>
@@ -47,6 +49,9 @@ const App = () => {
           <Route path="register" element={<Register />} />
         </Route>
 
+        {/* Admin login (outside AdminLayout so no sidebar) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+
         {/* Admin pages (nested under /admin) */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Adminpage />} />
@@ -58,12 +63,27 @@ const App = () => {
           <Route path="reservations" element={<AdminReservations />} />
           <Route path="reservations/:id" element={<ReservationDetails />} />
 
+          <Route path="/admin/reservations/:id/invoice" element={<Invoice />} />
+
           <Route path="users" element={<AdminUsers />} />
-          <Route path="settings" element={<div>Settings page (implement later)</div>} />
+          <Route
+            path="settings"
+            element={<div>Settings page (implement later)</div>}
+          />
         </Route>
 
         {/* fallback */}
-        <Route path="*" element={<div className="p-6">Open <a href="/admin" className="text-blue-600">/admin</a></div>} />
+        <Route
+          path="*"
+          element={
+            <div className="p-6">
+              Open{" "}
+              <a href="/admin" className="text-blue-600">
+                /admin
+              </a>
+            </div>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

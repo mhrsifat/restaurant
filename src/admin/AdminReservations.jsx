@@ -20,7 +20,9 @@ export default function AdminReservations() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   if (loading) return <p>Loading...</p>;
 
@@ -42,9 +44,13 @@ export default function AdminReservations() {
           </thead>
           <tbody>
             {reservations.length === 0 && (
-              <tr><td colSpan="7" className="p-4 text-center">No reservations</td></tr>
+              <tr>
+                <td colSpan="7" className="p-4 text-center">
+                  No reservations
+                </td>
+              </tr>
             )}
-            {reservations.map(r => (
+            {reservations.map((r) => (
               <tr key={r.reservation_id} className="border-t">
                 <td className="p-2">{r.reservation_id}</td>
                 <td className="p-2">{r.user_id}</td>
@@ -52,7 +58,20 @@ export default function AdminReservations() {
                 <td className="p-2">{r.time}</td>
                 <td className="p-2">{r.num_of_persons}</td>
                 <td className="p-2">{r.created_at}</td>
-                <td className="p-2"><Link to={`/admin/reservations/${r.reservation_id}`} className="text-blue-600">View</Link></td>
+                <td className="p-2 flex gap-2">
+                  <Link
+                    to={`/admin/reservations/${r.reservation_id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    View
+                  </Link>
+                  <Link
+                    to={`/admin/reservations/${r.reservation_id}/invoice`}
+                    className="text-green-600 hover:underline"
+                  >
+                    Invoice
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
