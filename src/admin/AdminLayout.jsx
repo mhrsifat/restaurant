@@ -1,77 +1,87 @@
 // src/admin/AdminLayout.jsx
-import React, { useState } from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Outlet, NavLink, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const AdminLayout = () => {
+export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
-  // Function to close sidebar only on mobile
-  const handleLinkClick = () => {
-    if (window.innerWidth < 768) {
-      setSidebarOpen(false);
-    }
-  };
+  // Auto-close on mobile when route changes
+  useEffect(() => {
+    if (window.innerWidth < 768) setSidebarOpen(false);
+  }, [location.pathname]);
 
-  // Common link styles
-  const linkClasses = ({ isActive }) =>
-    `block px-3 py-2 rounded transition ${
-      isActive
-        ? "bg-gray-700 text-white font-semibold"
-        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+  const navClass = ({ isActive }) =>
+    `flex items-center gap-3 px-3 py-2 rounded transition-colors text-sm ${
+      isActive ? "bg-gray-700 text-white font-medium" : "text-gray-300 hover:bg-gray-700 hover:text-white"
     }`;
+
+  const links = [
+    { to: "/admin", label: "Dashboard", emoji: "🏠" },
+    { to: "/admin/menu", label: "Menu", emoji: "🍽️" },
+    { to: "/admin/reservations", label: "Reservations", emoji: "📅" },
+    { to: "/admin/users", label: "Users", emoji: "👥" },
+    { to: "/admin/settings", label: "Settings", emoji: "⚙️" },
+  ];
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 bg-gray-800 w-64 transform transition-transform duration-300 ease-in-out z-40
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
-        md:translate-x-0`}
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-800 shadow transform transition-transform duration-200 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
+        aria-label="Admin sidebar"
       >
         <div className="flex items-center justify-between px-4 h-16 border-b border-gray-700">
-          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
-          <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
-            <X size={24} className="text-white" />
+          <div className="flex items-center gap-3">
+            <img src="/logo2.png" alt="Logo" className="h-8 w-8 object-contain" />
+            <span className="text-white font-semibold">Admin Panel</span>
+          </div>
+
+          <button className="md:hidden p-2 rounded hover:bg-gray-700/30" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar">
+            <X size={18} className="text-white" />
           </button>
         </div>
 
-        <nav className="mt-4 space-y-2 px-4">
-          <NavLink to="/admin" end className={linkClasses} onClick={handleLinkClick}>
-            Dashboard
-          </NavLink>
-          <NavLink to="/admin/users" className={linkClasses} onClick={handleLinkClick}>
-            Users
-          </NavLink>
-          <NavLink to="/admin/settings" className={linkClasses} onClick={handleLinkClick}>
-            Settings
-          </NavLink>
+        <nav className="px-3 py-4 space-y-1">
+          {links.map((l) => (
+            <NavLink key={l.to} to={l.to} end={l.to === "/admin"} className={navClass} onClick={() => window.innerWidth < 768 && setSidebarOpen(false)}>
+              <span className="inline-block w-6 text-center">{l.emoji}</span>
+              <span>{l.label}</span>
+            </NavLink>
+          ))}
         </nav>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Header */}
-        <header className="bg-white shadow h-16 flex items-center justify-between px-4">
+        <div className="mt-auto p-4 border-t border-gray-700">
           <button
-            className="md:hidden text-gray-600"
-            onClick={() => setSidebarOpen(true)}
+            className="w-full text-left text-gray-300 hover:text-white hover:bg-gray-700 px-3 py-2 rounded"
+            onClick={() => { alert("Logout - implement logic"); }}
           >
-            <Menu size={24} />
+            Sign out
           </button>
-          <h2 className="text-lg font-semibold">Admin Dashboard</h2>
-          <div className="flex items-center space-x-4">
-            <span className="text-gray-600">Admin</span>
+        </div>
+      </aside>
+
+      <div className="flex-1 flex flex-col md:ml-64">
+        <header className="h-16 bg-white shadow flex items-center justify-between px-4">
+          <div className="flex items-center gap-3">
+            <button className="md:hidden p-2 rounded hover:bg-gray-100" onClick={() => setSidebarOpen(true)} aria-label="Open sidebar">
+              <Menu size={20} className="text-gray-700" />
+            </button>
+            <h1 className="text-lg font-semibold text-gray-800">Admin Dashboard</h1>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-600">admin@example.com</div>
+            <div className="h-8 w-8 bg-gray-200 rounded-full" />
           </div>
         </header>
 
-        {/* Content */}
-        <main className="flex-1 p-4 overflow-auto">
+        <main className="flex-1 overflow-auto p-4">
           <Outlet />
         </main>
       </div>
     </div>
   );
-};
-
-export default AdminLayout;
+}
