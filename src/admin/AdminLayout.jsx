@@ -1,47 +1,51 @@
 // src/admin/AdminLayout.jsx
 import React, { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
-import { Menu, X } from "lucide-react"; // Icon library (install: npm i lucide-react)
+import { Outlet, NavLink } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Function to close sidebar only on mobile
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+  };
+
+  // Common link styles
+  const linkClasses = ({ isActive }) =>
+    `block px-3 py-2 rounded transition ${
+      isActive
+        ? "bg-gray-700 text-white font-semibold"
+        : "text-gray-300 hover:bg-gray-700 hover:text-white"
+    }`;
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 bg-gray-800 text-white w-64 transform transition-transform duration-300 ease-in-out z-40 
+        className={`fixed inset-y-0 left-0 bg-gray-800 w-64 transform transition-transform duration-300 ease-in-out z-40
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} 
         md:translate-x-0`}
       >
         <div className="flex items-center justify-between px-4 h-16 border-b border-gray-700">
-          <h1 className="text-xl font-bold">Admin Panel</h1>
-          <button
-            className="md:hidden"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <X size={24} />
+          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+          <button className="md:hidden" onClick={() => setSidebarOpen(false)}>
+            <X size={24} className="text-white" />
           </button>
         </div>
+
         <nav className="mt-4 space-y-2 px-4">
-          <Link
-            to="/admin"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
-          >
+          <NavLink to="/admin" end className={linkClasses} onClick={handleLinkClick}>
             Dashboard
-          </Link>
-          <Link
-            to="/admin/users"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
-          >
+          </NavLink>
+          <NavLink to="/admin/users" className={linkClasses} onClick={handleLinkClick}>
             Users
-          </Link>
-          <Link
-            to="/admin/settings"
-            className="block px-3 py-2 rounded hover:bg-gray-700"
-          >
+          </NavLink>
+          <NavLink to="/admin/settings" className={linkClasses} onClick={handleLinkClick}>
             Settings
-          </Link>
+          </NavLink>
         </nav>
       </div>
 
